@@ -6,11 +6,13 @@ A [TRD](docs/TRD.md) is available in the docs folder.
 
 Note: this is only a very limited POC, it doesn't reflect the final product or even an MVP.
 
-## Customize configuration
+## Frontend
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Nothing unusual here, it's a Vue.js frontend, meant for web browsers.
 
-## Project Setup
+Everything takes place in the `front-web` folder.
+
+### Project Setup
 
 ```sh
 npm install
@@ -33,3 +35,7 @@ npm run build
 ```sh
 npm run lint
 ```
+
+## Backend
+
+TBD
