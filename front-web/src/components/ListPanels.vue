@@ -8,24 +8,19 @@ const props = defineProps({
   dataAntelopes: {
     type: Array,
     required: true
+  },
+  dataAggregated: {
+    type: Object,
+    required: true
   }
 })
 
 // todo: the data stuff should be managed by the store
-function extractCountDataForPieChart(initialData, key) {
-  const data = initialData.reduce((acc, item) => {
-    const value = item[key]
-    if (acc[value]) {
-      acc[value] += 1
-    } else {
-      acc[value] = 1
-    }
-    return acc
-  }, {})
-  return Object.entries(data).map(([value, count]) => {
+function extractCountDataForPieChart(initialData, {name, count}) {
+  return initialData.map((item) => {
     return {
-      name: value,
-      value: count
+      name: item[name],
+      value: item[count]
     }
   })
 }
@@ -47,9 +42,9 @@ function extractDataForScatter(initialData, key1, key2, key3) {
 }
 
 const dataForAntelopesPerContinent = ref(
-  extractCountDataForPieChart(props.dataAntelopes, 'continent')
+  extractCountDataForPieChart(props.dataAggregated.continents, {name: 'continentName', count: 'nbAntelopes'})
 )
-const dataForHornTypes = ref(extractCountDataForPieChart(props.dataAntelopes, 'horns'))
+const dataForHornTypes = ref(extractCountDataForPieChart(props.dataAggregated.horns, {name: 'hornsShape', count: 'nbAntelopes'}))
 const dataForScatter = ref(extractDataForScatter(props.dataAntelopes, 'height', 'weight'))
 </script>
 

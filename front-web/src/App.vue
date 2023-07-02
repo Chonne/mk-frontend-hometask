@@ -25,10 +25,23 @@ const fetchData = async () => {
   }
 }
 
+const fetchAggregatedData = async () => {
+  try {
+    // todo: move this to a config file
+    const response = await fetch('http://localhost:3000/antelopes/aggregated')
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // fetch data onMount
 const dataAntelopes = ref([])
+const dataAggregated = ref({})
 onMounted(async () => {
   dataAntelopes.value = await fetchData()
+  dataAggregated.value = await fetchAggregatedData()
 })
 </script>
 
@@ -38,6 +51,6 @@ onMounted(async () => {
   </header>
 
   <main>
-    <ListPanels :dataAntelopes="dataAntelopes" v-if="dataAntelopes.length > 0" />
+    <ListPanels :dataAntelopes="dataAntelopes" :dataAggregated="dataAggregated" v-if="dataAntelopes.length > 0 && Object.keys(dataAggregated).length > 0" />
   </main>
 </template>
