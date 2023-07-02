@@ -16,7 +16,9 @@ export async function getAggregatedAntelopessHandler(
   reply: FastifyReply
 ) {
   try {
-    const aggregated = await getAggregatedAntelopes();
+    const aggregated = await getAggregatedAntelopes(
+      getAntelopeRepository(request.server.orm)
+    );
     return reply.code(200).send(aggregated);
   } catch (e) {
     logger.error(e, 'getAggregatedAntelopessHandler: error getting antelopes');

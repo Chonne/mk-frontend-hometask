@@ -1,9 +1,13 @@
 type AggregatedDataOutput = {
   continents: {
-    [key: string]: number;
-  };
+    continentId: number;
+    continentName: string;
+    nbAntelopes: number;
+  }[];
   horns: {
-    [key: string]: number;
-  };
+    hornsId: number;
+    hornsShape: string;
+    nbAntelopes: number;
+  }[];
   total: number;
 };

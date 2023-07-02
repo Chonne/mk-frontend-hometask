@@ -1,11 +1,57 @@
 import { Repository } from 'typeorm';
 import { Antelope } from '../../db/entities';
 
-export async function getAggregatedAntelopes(): Promise<AggregatedDataOutput> {
+// todo: move this to a repository
+const getAntelopesPerContinent = async (
+  AntelopeRepository: Repository<Antelope>
+): Promise<
+  {
+    continentId: number;
+    continentName: string;
+    nbAntelopes: number;
+  }[]
+> => {
+  const groupedContinents = await AntelopeRepository.createQueryBuilder(
+    'antelope'
+  )
+    .select('COUNT(*)', 'nbAntelopes')
+    .addSelect('continent.id', 'continentId')
+    .addSelect('continent.name', 'continentName')
+    .leftJoinAndSelect('antelope.continent', 'continent')
+    .groupBy('continentId')
+    .getRawMany();
+
+  return groupedContinents;
+};
+
+// todo: move this to a repository
+const getAntelopesPerHorns = async (
+  AntelopeRepository: Repository<Antelope>
+): Promise<
+  {
+    hornsId: number;
+    hornsShape: string;
+    nbAntelopes: number;
+  }[]
+> => {
+  const groupedHorns = await AntelopeRepository.createQueryBuilder('antelope')
+    .select('COUNT(*)', 'nbAntelopes')
+    .addSelect('horns.id', 'hornsId')
+    .addSelect('horns.shape', 'hornsShape')
+    .leftJoinAndSelect('antelope.horns', 'horns')
+    .groupBy('hornsId')
+    .getRawMany();
+
+  return groupedHorns;
+};
+
+export async function getAggregatedAntelopes(
+  AntelopeRepository: Repository<Antelope>
+): Promise<AggregatedDataOutput> {
   return {
-    continents: {},
-    horns: {},
-    total: 0,
+    continents: await getAntelopesPerContinent(AntelopeRepository),
+    horns: await getAntelopesPerHorns(AntelopeRepository),
+    total: await AntelopeRepository.count(),
   };
 }
 
