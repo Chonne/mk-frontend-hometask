@@ -1,4 +1,5 @@
 import fastify, { FastifyServerOptions } from 'fastify';
+import cors from '@fastify/cors';
 import { antelopesRoute } from './modules/antelopes/antelopes.route';
 import * as dbPlugin from './plugins/db.plugin';
 import healthPlugin from './plugins/health.plugin';
@@ -9,6 +10,8 @@ export default async function buildApp(
   config: { db?: { type: string; database: string } } = {}
 ) {
   const app = fastify(opts);
+
+  await app.register(cors, {});
 
   await dbPlugin.register(app, config.db);
 
