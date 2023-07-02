@@ -6,7 +6,7 @@ export class Horns {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   shape: string;
 
   @OneToMany(() => Antelope, (antelope) => antelope.horns)

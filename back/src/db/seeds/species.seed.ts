@@ -1,33 +1,47 @@
-// import fs from 'fs';
-// import path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 import { DataSource } from 'typeorm';
 import { Antelope, Continent, Horns } from '../entities';
 
-// const antelopes = JSON.parse(
-//   fs.readFileSync(
-//     path.join(__dirname, '..', '..', 'data', 'species.json'),
-//     'utf8'
-//   )
-// );
-
 export async function seedDatabase(datasource: DataSource) {
-  const africa = new Continent();
-  africa.name = 'Africa';
-  await datasource.manager.save(africa);
+  const species = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'species.json'), 'utf8')
+  );
 
-  const twistedHorns = new Horns();
-  twistedHorns.shape = 'Twisted';
-  await datasource.manager.save(twistedHorns);
+  const savedContinents = new Map<string, Continent>();
+  const savedHorns = new Map<string, Horns>();
 
-  const addax = new Antelope();
-  addax.name = 'Addax';
-  addax.weight = 220;
-  addax.height = 41;
-  addax.picture =
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/A_big_male_Addax_showing_as_the_power_of_his_horns.jpg' +
-    '/1280px-A_big_male_Addax_showing_as_the_power_of_his_horns.jpg';
-  addax.continent = africa;
-  addax.horns = twistedHorns;
-  await datasource.manager.save(addax);
+  for (const oneSpecies of species) {
+    let continent: Continent;
+
+    if (savedContinents.has(oneSpecies.continent)) {
+      continent = savedContinents.get(oneSpecies.continent);
+    } else {
+      continent = new Continent();
+      continent.name = oneSpecies.continent;
+      await datasource.manager.save(continent);
+      savedContinents.set(oneSpecies.continent, continent);
+    }
+
+    let horns: Horns;
+
+    if (savedHorns.has(oneSpecies.horns)) {
+      horns = savedHorns.get(oneSpecies.horns);
+    } else {
+      horns = new Horns();
+      horns.shape = oneSpecies.horns;
+      await datasource.manager.save(horns);
+      savedHorns.set(oneSpecies.horns, horns);
+    }
+
+    const antelope = new Antelope();
+    antelope.name = oneSpecies.name;
+    antelope.weight = oneSpecies.weight;
+    antelope.height = oneSpecies.height;
+    antelope.picture = oneSpecies.picture;
+    antelope.continent = continent;
+    antelope.horns = horns;
+    await datasource.manager.save(antelope);
+  }
 }

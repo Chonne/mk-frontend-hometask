@@ -6,7 +6,7 @@ export class Continent {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   name: string;
 
   @OneToMany(() => Antelope, (antelope) => antelope.continent)
