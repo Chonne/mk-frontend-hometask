@@ -16,7 +16,8 @@ function prepareData(data) {
 
 const fetchData = async () => {
   try {
-    const response = await fetch('/data/species.json')
+    // todo: move this to a config file
+    const response = await fetch('http://localhost:3000/antelopes?limit=50')
     const data = await response.json()
     return prepareData(data)
   } catch (error) {
