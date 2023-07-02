@@ -54,9 +54,9 @@ export async function getListAntelopesHandler(
   reply: FastifyReply
 ) {
   try {
-    // todo: support pagination
     const antelopes = await getListAntelopes(
-      getAntelopeRepository(request.server.orm)
+      getAntelopeRepository(request.server.orm),
+      request.query
     );
     return reply.code(200).send(antelopes);
   } catch (e) {
