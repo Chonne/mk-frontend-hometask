@@ -16,7 +16,7 @@ const props = defineProps({
 })
 
 // todo: the data stuff should be managed by the store
-function extractCountDataForPieChart(initialData, {name, count}) {
+function extractCountDataForPieChart(initialData, { name, count }) {
   return initialData.map((item) => {
     return {
       name: item[name],
@@ -42,9 +42,17 @@ function extractDataForScatter(initialData, key1, key2, key3) {
 }
 
 const dataForAntelopesPerContinent = ref(
-  extractCountDataForPieChart(props.dataAggregated.continents, {name: 'continentName', count: 'nbAntelopes'})
+  extractCountDataForPieChart(props.dataAggregated.continents, {
+    name: 'continentName',
+    count: 'nbAntelopes'
+  })
 )
-const dataForHornTypes = ref(extractCountDataForPieChart(props.dataAggregated.horns, {name: 'hornsShape', count: 'nbAntelopes'}))
+const dataForHornTypes = ref(
+  extractCountDataForPieChart(props.dataAggregated.horns, {
+    name: 'hornsShape',
+    count: 'nbAntelopes'
+  })
+)
 const dataForScatter = ref(extractDataForScatter(props.dataAntelopes, 'height', 'weight'))
 </script>
 

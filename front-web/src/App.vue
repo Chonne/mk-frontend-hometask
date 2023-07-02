@@ -51,6 +51,10 @@ onMounted(async () => {
   </header>
 
   <main>
-    <ListPanels :dataAntelopes="dataAntelopes" :dataAggregated="dataAggregated" v-if="dataAntelopes.length > 0 && Object.keys(dataAggregated).length > 0" />
+    <ListPanels
+      :dataAntelopes="dataAntelopes"
+      :dataAggregated="dataAggregated"
+      v-if="dataAntelopes.length > 0 && Object.keys(dataAggregated).length > 0"
+    />
   </main>
 </template>
